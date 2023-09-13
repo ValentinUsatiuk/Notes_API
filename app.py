@@ -1,8 +1,10 @@
 from flask import Flask, render_template, request, jsonify
+from flask_restful import Resource, Api
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
 app = Flask(__name__)
+api = Api(app)
 
 # Налаштування підключення до бази данних
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///data.db"
@@ -15,7 +17,7 @@ class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255))
     content = db.Column(db.Text)
-    created_on = db.Column(db.Date)
+    created_on = db.Column(db.DateTime)
 
 
 # Документація API
@@ -24,10 +26,8 @@ def home():
     return render_template("home.html")
 
 
-# Отримуємо список усіх заміток
-@app.route("/notes", methods=["GET", "POST"])
-def all_notes():
-    if request.method == "GET":
+class NotesResource(Resource):
+    def get(self):
         all_notes = Note.query.all()
         notes_list = []
         for note in all_notes:
@@ -39,7 +39,8 @@ def all_notes():
             }
             notes_list.append(note_data)
         return jsonify(notes=notes_list)
-    if request.method == "POST":
+
+    def post(self):
         data = request.get_json()
         if "title" not in data or "content" not in data:
             return jsonify({"error": 'Insufficient data to create note'})
@@ -51,40 +52,51 @@ def all_notes():
         db.session.add(new_note)
         db.session.commit()
         return jsonify({'message': 'The note was created successfully'})
+class NoteResource(Resource):
+    def get(self, note_id):
+        note = self.get_note_by_id(note_id)
+        if not note:
+            return self.note_not_found_response()
 
-# Отримуємо конкретну замітку за id/ новлення існуючої замітки за id/
-# Видалення замітки за id
-@app.route("/notes/<int:note_id>", methods=["GET", "PUT", "DELETE"])
-def note(note_id):
-    note = Note.query.get(note_id)
-    if note:
-        if request.method == "GET":
-            result_dict = {
-                "id": note.id,
-                "title": note.title,
-                "content": note.content,
-                "created_on": note.created_on.strftime('%Y-%m-%d %H:%M:%S'),
-            }
-            return result_dict
-        if request.method == "PUT":
-            data = request.get_json()
-            if note is None:
-                return jsonify({'error': "This note doesn't exist"}), 404
-            if "title: in data":
-                note.title = data["title"]
-            if "content" in data:
-                note.content = data["content"]
-            db.session.commit()
-            return jsonify({"message": "Note updated successfully"})
-        if request.method == "DELETE":
-            if note is None:
-                return jsonify({'error': "This note doesn't exist"}), 404
-            db.session.delete(note)
-            db.session.commit()
-            return jsonify({"message": "Note delete successfully"})
-    else:
-        return jsonify({"error": "This note doesn't exist"}, 404)
+        result_dict = {
+            "id": note.id,
+            "title": note.title,
+            "content": note.content,
+            "created_on": note.created_on.strftime('%Y-%m-%d %H:%M:%S'),
+        }
+        return result_dict
 
+    def put(self, note_id):
+        note = self.get_note_by_id(note_id)
+        if not note:
+            return self.note_not_found_response()
+
+        data = request.get_json()
+        if "title" in data:
+            note.title = data["title"]
+        if "content" in data:
+            note.content = data["content"]
+        db.session.commit()
+        return jsonify({"message": "Note updated successfully"})
+
+    def delete(self, note_id):
+        note = self.get_note_by_id(note_id)
+        if not note:
+            return self.note_not_found_response()
+
+        db.session.delete(note)
+        db.session.commit()
+        return jsonify({"message": "Note deleted successfully"})
+
+    def get_note_by_id(self, note_id):
+        return Note.query.get(note_id)
+
+    def note_not_found_response(self):
+        return jsonify({"error": "This note doesn't exist"}), 404
+
+
+api.add_resource(NoteResource, "/notes/<int:note_id>")
+api.add_resource(NotesResource, "/notes")
 
 if __name__ == "__main__":
     with app.app_context():
