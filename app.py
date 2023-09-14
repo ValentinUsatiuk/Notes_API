@@ -13,11 +13,23 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///data.db"
 db = SQLAlchemy(app)
 
 
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100), unique=True, nulable=False)
+    password_hash = db.Column(db.String(200), nullable=False)
+    notes = db.relationship("Note", backref="user",
+                            lazy="dynamic", cascade="all, delete-orhan")
+
+    def __repr__(self):
+        return '<User %r>' % self.username
+
+
 class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255))
     content = db.Column(db.Text)
     created_on = db.Column(db.DateTime)
+    user_id = db.Column(db.Integer, db.ForignKey("user.id"))
 
 
 # Документація API
@@ -26,7 +38,7 @@ def home():
     return render_template("home.html")
 
 
-class NotesResource(Resource):
+class AllNotesResource(Resource):
     def get(self):
         all_notes = Note.query.all()
         notes_list = []
@@ -96,7 +108,7 @@ class NoteResource(Resource):
 
 
 api.add_resource(NoteResource, "/notes/<int:note_id>")
-api.add_resource(NotesResource, "/notes")
+api.add_resource(AllNotesResource, "/notes")
 
 if __name__ == "__main__":
     with app.app_context():
