@@ -5,6 +5,84 @@
     <title>NOTES API</title>
 </head>
 <body>
- <h1>Hi it`s notes API</h1>
+    <h1>Notes API Documentation</h1>
+    <h2>Description</h2>
+    <p>Short project description goes here.</p>
+
+    <h2>Main URL Paths</h2>
+
+    <h3>User Registration</h3>
+    <ul>
+        <li><strong>URL:</strong> /register</li>
+        <li><strong>Method:</strong> POST</li>
+        <li><strong>Parameters:</strong> username (username), password (password)</li>
+        <li><strong>Description:</strong> Register a new user in the system.</li>
+        <li><strong>Example Request:</strong></li>
+        <pre>
+{
+  "username": "example_user",
+  "password": "password123"
+}
+</pre>
+        <li><strong>Example Response:</strong></li>
+        <pre>
+{
+  "message": "User registered successfully"
+}
+</pre>
+    </ul>
+
+    <h3>User Login</h3>
+    <ul>
+        <li><strong>URL:</strong> /login</li>
+        <li><strong>Method:</strong> POST</li>
+        <li><strong>Parameters:</strong> username (username), password (password)</li>
+        <li><strong>Description:</strong> Authenticate a user in the system.</li>
+        <li><strong>Example Request:</strong></li>
+        <pre>
+{
+  "username": "example_user",
+  "password": "password123"
+}
+</pre>
+        <li><strong>Example Response:</strong></li>
+        <pre>
+{
+  "message": "Login successfully"
+}
+</pre>
+    </ul>
+
+    <h3>List All Notes</h3>
+    <ul>
+        <li><strong>URL:</strong> /notes</li>
+        <li><strong>Method:</strong> GET</li>
+        <li><strong>Parameters:</strong> None</li>
+        <li><strong>Description:</strong> Get a list of all notes in the system.</li>
+        <li><strong>Example Response:</strong></li>
+        <pre>
+{
+  "notes": [
+    {
+      "id": 1,
+      "title": "Note Title",
+      "content": "Note Content",
+      "created_on": "2023-09-10 14:30:00",
+      "user_id": 1
+    },
+    {
+      "id": 2,
+      "title": "Another Note",
+      "content": "Text of another note",
+      "created_on": "2023-09-11 10:15:00",
+      "user_id": 1
+    }
+  ]
+}
+</pre>
+    </ul>
+
+    <!-- Add more path descriptions here -->
+
 </body>
 </html>
