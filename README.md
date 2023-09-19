@@ -1,23 +1,22 @@
-## Назва проекту: Notes API
+## Name of project: Notes API
 
-### Короткий опис
-Notes API - це простий інтерфейс програмного забезпечення (API), 
-призначений для керування нотатками користувачів. 
-Цей API дозволяє користувачам створювати, зберігати, 
-оновлювати та видаляти свої нотатки. 
-Кожен користувач має можливість зареєструватися в системі та авторизуватися,
-щоб отримати доступ до свого списку нотаток.
+### Brief description
+The Notes API is a simple software interface (API)
+designed for managing user notes. 
+This API allows users to create, store, update, and delete their notes. 
+Each user has the ability to register in the system 
+and authorize themselves to access their list of notes.
 
-Основні можливості API включають:
+The main features of the API include:
 
-- Реєстрацію нових користувачів і збереження їх облікових даних.
-- Авторизацію користувачів для отримання доступу до своїх нотаток.
-- Створення нових нотаток зі заголовками та текстом.
-- Отримання списку всіх нотаток користувача.
-- Отримання інформації про окрему нотатку за її ідентифікатором.
-- Оновлення інформації про нотатку, включаючи заголовок та текст.
-- Видалення нотаток користувача.
-- Notes API є відмінним рішенням для розробки додатків, 
-які потребують функціональності управління нотатками користувачів,
-таких як блокноти, додатки для зберігання ідеї, 
-списки завдань та багато інших.
+- Registering new users and storing their account information.
+- Authorizing users to access their notes.
+- Creating new notes with titles and text.
+- Retrieving a list of all user notes.
+- Retrieving information about a specific note by its identifier.
+- Updating note information, including the title and text.
+- Deleting user notes.
+
+The Notes API is an excellent solution for developing applications 
+that require functionality for managing user notes, 
+such as notebooks, idea storage apps, to-do lists, and many others.
