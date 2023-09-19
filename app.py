@@ -121,7 +121,7 @@ class NoteResource(Resource):
     def put(self, note_id):
         note = self.get_note_by_id(note_id)
         if not note:
-            return self.note_not_found_response()
+            return self.note_not_found_response(note_id)
 
         data = request.get_json()
         if "title" in data:

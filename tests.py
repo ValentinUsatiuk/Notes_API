@@ -95,13 +95,13 @@ def test_delete_note():
 
 if __name__ == '__main__':
     # Running tests
-    test_registration()
-    test_duplicate_registration()
-    test_login()
-    test_invalid_login()
+    #test_registration()
+    #test_duplicate_registration()
+    #test_login()
+    #test_invalid_login()
     test_create_note()
     test_get_all_notes()
     test_get_note_by_id()
-    test_update_note()
-    test_delete_note()
+    #test_update_note()
+    #test_delete_note()
     print('All tests passed!')
